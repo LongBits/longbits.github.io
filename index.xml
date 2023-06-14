@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Long Blog</title>
+    <link>https://longbits.github.io/</link>
+    <description>Recent content on A Long Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&lt;a href=&#34;https://creativecommons.org/licenses/by-nc/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;CC BY-NC 4.0&lt;/a&gt;</copyright>
+    <lastBuildDate>Tue, 13 Jun 2023 19:32:49 -0400</lastBuildDate><atom:link href="https://longbits.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SQLi US Cyber Games</title>
+      <link>https://longbits.github.io/ctf/sqli/</link>
+      <pubDate>Tue, 13 Jun 2023 19:32:49 -0400</pubDate>
+      
+      <guid>https://longbits.github.io/ctf/sqli/</guid>
+      <description>This is a write up from the web challenge &amp;ldquo;Hire-a-hacker&amp;rdquo; from the US Cyber Games. The premise of the challenge is that a nefarious group created a website containing a database of 3lite hackers that someone could hire. The challenge was to see if there was a vulnerability in the website that we could potentially exploit (aka getting the flag).
+Please note: To see images in larger size, right click and view in seperate tab.</description>
+    </item>
+    
+  </channel>
+</rss>

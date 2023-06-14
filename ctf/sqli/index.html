@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Austin Long ">
+<meta name="description" content="This is a write up from the web challenge &amp;ldquo;Hire-a-hacker&amp;rdquo; from the US Cyber Games. The premise of the challenge is that a nefarious group created a website containing a database of 3lite hackers that someone could hire. The challenge was to see if there was a vulnerability in the website that we could potentially exploit (aka getting the flag).
+Please note: To see images in larger size, right click and view in seperate tab." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://longbits.github.io/ctf/sqli/" />
+
+
+    <title>
+        
+            SQLi US Cyber Games :: A Long Blog  — Hello Friend NG Theme
+        
+    </title>
+
+
+
+
+
+<link rel="stylesheet" href="https://longbits.github.io/main.b78c3be9451dc4ca61ca377f3dc2cf2e6345a44c2bae46216a322ef366daa399.css" integrity="sha256-t4w76UUdxMphyjd/PcLPLmNFpEwrrkYhajIu82bao5k=">
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://longbits.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://longbits.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://longbits.github.io/favicon-16x16.png">
+    <link rel="manifest" href="https://longbits.github.io/site.webmanifest">
+    <link rel="mask-icon" href="https://longbits.github.io/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="https://longbits.github.io/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+<meta itemprop="name" content="SQLi US Cyber Games">
+<meta itemprop="description" content="This is a write up from the web challenge &ldquo;Hire-a-hacker&rdquo; from the US Cyber Games. The premise of the challenge is that a nefarious group created a website containing a database of 3lite hackers that someone could hire. The challenge was to see if there was a vulnerability in the website that we could potentially exploit (aka getting the flag).
+Please note: To see images in larger size, right click and view in seperate tab."><meta itemprop="datePublished" content="2023-06-13T19:32:49-04:00" />
+<meta itemprop="dateModified" content="2023-06-13T19:32:49-04:00" />
+<meta itemprop="wordCount" content="562"><meta itemprop="image" content="https://longbits.github.io"/>
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://longbits.github.io"/>
+
+<meta name="twitter:title" content="SQLi US Cyber Games"/>
+<meta name="twitter:description" content="This is a write up from the web challenge &ldquo;Hire-a-hacker&rdquo; from the US Cyber Games. The premise of the challenge is that a nefarious group created a website containing a database of 3lite hackers that someone could hire. The challenge was to see if there was a vulnerability in the website that we could potentially exploit (aka getting the flag).
+Please note: To see images in larger size, right click and view in seperate tab."/>
+
+
+
+    <meta property="og:title" content="SQLi US Cyber Games" />
+<meta property="og:description" content="This is a write up from the web challenge &ldquo;Hire-a-hacker&rdquo; from the US Cyber Games. The premise of the challenge is that a nefarious group created a website containing a database of 3lite hackers that someone could hire. The challenge was to see if there was a vulnerability in the website that we could potentially exploit (aka getting the flag).
+Please note: To see images in larger size, right click and view in seperate tab." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://longbits.github.io/ctf/sqli/" /><meta property="og:image" content="https://longbits.github.io"/><meta property="article:section" content="CTF" />
+<meta property="article:published_time" content="2023-06-13T19:32:49-04:00" />
+<meta property="article:modified_time" content="2023-06-13T19:32:49-04:00" />
+
+
+
+
+
+
+    <meta property="article:published_time" content="2023-06-13 19:32:49 -0400 EDT" />
+
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://longbits.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">&gt;</span>
+            <span class="logo__text ">
+                $ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://longbits.github.io/ctf/">CTF</a></li><li><a href="https://longbits.github.io/whoami/">Whoami</a></li>
+        <div class="submenu">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">en</a>
+                <div class="dropdown-content">
+                    
+                        
+                    
+                </div>
+            </li>
+        </div>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            
+            </p>
+        </div>
+
+        <article>
+            <h2 class="post-title"><a href="https://longbits.github.io/ctf/sqli/">SQLi US Cyber Games</a></h2>
+
+            
+            
+            
+
+            <div class="post-content">
+                <p>This is a write up from the web challenge &ldquo;Hire-a-hacker&rdquo; from the US Cyber Games. The premise of the challenge is that a nefarious group created a website containing a database of 3lite hackers that someone could hire. The challenge was to see if there was a vulnerability in the website that we could potentially exploit (aka getting the flag).</p>
+<p><strong>Please note:</strong> To see images in larger size, right click and view in seperate tab.</p>
+<p><img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC1.png" alt="Website"></p>
+<hr>
+<h2 id="recon">Recon</h2>
+<p>For this challenge, I used Burp Pro. I proxied my Firefox browser and crawled the website. Burp did not get anything from that. It was only when I started manually interacting with the application is when I started to see the HTTP History populate. I suspected some sort of AJAX implementation. To learn more about AJAX, click <a href="https://www.w3schools.com/js/js_ajax_intro.asp">here</a>. I inspected the source code and sure enough, AJAX was being used. You could tell by the seamless updating of the webpage without a complete refresh and with the jQuery library being used.</p>
+<p><img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC2.png" alt="Source_Code"></p>
+<p>The AJAX code looked like it was making an API call via the search function to interact with a Data table on the backend.</p>
+<hr>
+<h2 id="identifying-the-vulnerability">Identifying the Vulnerability</h2>
+<p>Let’s see what we can get by interacting with the search function! First, we will need a baseline of what it should look like. I searched the first name I saw to get a normal response.</p>
+<p><img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC3.png" alt="Search"></p>
+<p>Now we can try different injections to see if we can get an Error to populate. I appended the name with the typical single quote and it seemed to not do anything! Hmm, that is weird.</p>
+<p><img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC4.png" alt="Qoute"></p>
+<p>Let’s look at Burp to see the Response we got. Aha! We got a 500 status code! Because we got a server error code and the output did not change when we injected a single quote, it is safe to say that we have a SQL injection vulnerability. Looked like the parameter “search[value]” is the vulnerable parameter.</p>
+<p><img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC5.png" alt="Burp"></p>
+<hr>
+<h2 id="attack">Attack</h2>
+<p>Now it is time to exploit. I could try to do a manual attack to grab information based on Boolean logic. This would have to be done due to the amount of “blindness” we are facing. Basically, I would have to manually interact with the backend DBMS schema to build out the information I need one request at a time. For example, if using MySQL I could run a statement like Abah’ AND substr((select table_name from information_schema.tables limit 1),1,1) &gt; “a”;#. The statement is selecting the first letter of the table name to see if it is greater than “a”. If it returns True, we can try “b” and so on until we get False. The False will tell us that we found the first letter of the table name. Doing this by hand will take loads of time. I am not smart enough to do this by hand and I would also have to enumerate more to find what DBMS is being used. So, I am going to use SQLmap!</p>
+<ul>
+<li>
+<p>Step 1: Save the request to be able to pass it through SQLmap.
+<img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC6.png" alt="Save"></p>
+</li>
+<li>
+<p>Step 2: Run the command to identify the file we saved the request in and specify the vulnerable parameter. We had to turn the level and risk up all the way since the first time SQLMap did not find anything.
+<img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC7.png" alt="Command"></p>
+</li>
+<li>
+<p>Step 3: Run the &ndash;tables to find the flag table
+<img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC10.png" alt="Command2"></p>
+</li>
+<li>
+<p>Step 4: DUMP IT!
+<img src="https://longbits.github.io/CTF/SQLi_Cyber_Games/PIC11.png" alt="Command3"></p>
+</li>
+</ul>
+
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+            
+            
+  		</div>
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2023</span>
+            <span><a href="https://longbits.github.io">Austin Long</a></span>
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span><a href="https://longbits.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+            
+        </div>
+    </div>
+    
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span><span>Made with &#10084; by <a href="https://github.com/rhazdon">Djordje Atlialp</a></span>
+        </div>
+    </div>
+    
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="https://longbits.github.io/bundle.min.205d491810c28f95aa953fae884e1c27abe13fdf93ec63b882d0036b248d4a6282eb2d134e4e7225c6ad6e86db87b08488a361ca4a7383d01fcff43f3d57b9c3.js" integrity="sha512-IF1JGBDCj5WqlT&#43;uiE4cJ6vhP9&#43;T7GO4gtADaySNSmKC6y0TTk5yJcatbobbh7CEiKNhykpzg9Afz/Q/PVe5ww=="></script>
+
+
+
+    </body>
+</html>
